@@ -63,6 +63,7 @@
     renderer.particles = [];
     $('#level-name').textContent = level.name;
     $('#world-tag').textContent = 'World ' + level.world + ' · ' + level.worldName;
+    $('#level-note').textContent = level.note || '';
     show('game');
     requestAnimationFrame(() => { renderer.layout(level); recompute(); });
   }
