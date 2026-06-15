@@ -45,34 +45,43 @@ Stuck? The **💡 Hint** button briefly reveals a working solution.
 ## Project layout
 
 ```
-index.html         App shell + all screens (menu, level select, game, win)
-css/style.css      Neon UI theme, responsive, safe-area aware
-js/engine.js       Pure beam-simulation engine (shared by game + tools)
-js/levels.js       32 generated, validated levels (auto-generated)
-js/render.js       Canvas renderer: grid, objects, glowing beams, particles
-js/audio.js        Procedural Web Audio sound effects
-js/game.js         Game controller: screens, input, progression, save data
-tools/generate.js  Constructive level generator (Node, build-time)
-tools/validate.js  Independent validator for js/levels.js
+index.html          App shell + all screens (menu, level select, game, win)
+css/style.css       Neon UI theme, responsive, safe-area aware
+js/engine.js        Pure beam-simulation engine (shared by game + tools)
+js/levels.js        The 32 built + validated levels (generated from leveldata)
+js/render.js        Canvas renderer: grid, objects, glowing beams, particles
+js/audio.js         Procedural Web Audio sound effects
+js/game.js          Game controller: screens, input, progression, save data
+tools/leveldata.js  The hand-authored level designs (ASCII maps + purpose)
+tools/solver.js     DFS solver: finds every minimal solution to a level
+tools/build.js      Parses leveldata, validates with the solver, emits levels.js
+tools/validate.js   Independent re-check of the emitted js/levels.js
 ```
 
-## Levels are guaranteed solvable
+## Level design is intentional — and verified
 
-Levels aren't hand-placed and hoped-for. `tools/generate.js` builds each puzzle
-**constructively**: it walks a beam from the source, dropping a mirror at every
-turn (plus filters / a splitter / crystals along the way). Those mirrors *are*
-the intended solution — they're then removed from the board for the player to
-rediscover. Because the solution exists before the puzzle, every level is
-solvable by design.
+Every level is **hand-authored** in `tools/leveldata.js` as an ASCII map with a
+stated *purpose* (the `note` shown in-game): it introduces or tests one specific
+skill and presents a real dilemma, not just a solution. The four worlds form a
+teaching curriculum:
 
-Every level is then verified with the real engine: it must **win with its stored
-solution** and must **not** already be solved with zero mirrors (i.e. it isn't
-trivial). Regenerate and re-verify any time:
+1. **Reflection** — mirrors, threading two crystals, fixed mirrors, wall mazes
+2. **Spectrum** — colour filters: matching, ordering, repainting, wrong-tint traps
+3. **Fracture** — beam splitters: aiming both arms, cascades, boxed-in threading
+4. **Convergence** — the payoff: resolve a red/blue colour *conflict* by splitting
+
+Quality is enforced by a real **solver** (`tools/solver.js`). For every level the
+build step checks it is **solvable**, that its budget equals the **minimum**
+mirrors required (no room for sloppy play), and reports the **solution count** so
+puzzles stay tight and intentional — most have a single intended solution.
 
 ```bash
-node tools/generate.js   # rebuild js/levels.js (32 validated levels)
-node tools/validate.js   # independently re-check the emitted file
+node tools/build.js            # report: budget / min-mirrors / solution-count per level
+node tools/build.js --emit     # validate all 32 and (re)write js/levels.js
+node tools/validate.js         # independent re-check of the emitted file
 ```
+
+The stored solution doubles as the in-game **Hint**.
 
 ## Features
 
