@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#070a18" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <title>PRISM — Light Puzzle</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- MENU -->
+    <section id="screen-menu" class="screen">
+      <div class="menu-inner">
+        <div class="logo">
+          <h1>PRISM</h1>
+          <p class="tagline">bend the light · light the crystals</p>
+        </div>
+        <div class="menu-stars">★ <span id="total-stars">0 / 96</span></div>
+        <div class="menu-buttons">
+          <button id="btn-continue" class="btn btn-primary" data-idx="0">PLAY</button>
+          <button id="btn-play" class="btn">LEVEL SELECT</button>
+          <button id="btn-reset-progress" class="btn btn-ghost">Reset Progress</button>
+        </div>
+        <p class="hint-text">Tap a cell to place a mirror · tap again to rotate · once more to remove</p>
+      </div>
+    </section>
+
+    <!-- LEVEL SELECT -->
+    <section id="screen-levels" class="screen">
+      <header class="topbar">
+        <button id="btn-levels-back" class="icon-btn">‹</button>
+        <h2>LEVELS</h2>
+        <div class="topbar-stars">★ <span id="levels-stars">0 / 96</span></div>
+      </header>
+      <div id="level-grid" class="level-grid"></div>
+    </section>
+
+    <!-- GAME -->
+    <section id="screen-game" class="screen">
+      <header class="topbar game-bar">
+        <button id="btn-quit" class="icon-btn">‹</button>
+        <div class="level-meta">
+          <span id="world-tag" class="world-tag">World 1</span>
+          <span id="level-name" class="level-name">Level</span>
+        </div>
+        <button id="btn-mute" class="icon-btn">🔊</button>
+      </header>
+
+      <div class="hud">
+        <div id="mirror-pill" class="pill"><span class="pill-ico">◇</span> Mirrors <b id="mirror-count">0/0</b></div>
+        <div class="pill"><span class="pill-ico">◆</span> Lit <b id="target-count">0/0</b></div>
+        <div class="pill"><span class="pill-ico">⚡</span> Taps <b id="tap-count">0</b> <i>· par <span id="par-count">0</span></i></div>
+      </div>
+
+      <div class="board-wrap">
+        <canvas id="board"></canvas>
+      </div>
+
+      <div class="controls">
+        <button id="btn-reset" class="btn btn-small">↺ Reset</button>
+        <button id="btn-hint" class="btn btn-small btn-ghost">💡 Hint</button>
+      </div>
+    </section>
+
+    <!-- WIN MODAL -->
+    <div id="modal-win" class="modal">
+      <div class="modal-card">
+        <h2 id="win-title">SOLVED</h2>
+        <div id="win-stars" class="stars-row">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="win-stats">Taps <b id="win-taps">0</b> · Par <b id="win-par">0</b></p>
+        <div class="modal-buttons">
+          <button id="btn-replay" class="btn btn-small btn-ghost">↺ Replay</button>
+          <button id="btn-win-levels" class="btn btn-small btn-ghost">≡ Levels</button>
+          <button id="btn-next" class="btn btn-small btn-primary">Next ›</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/engine.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
