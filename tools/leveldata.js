@@ -183,4 +183,38 @@ module.exports = [
   { world: 5, name: 'Dispersion', budget: 3,
     note: 'Split white the long way and deliver three pure colours.',
     grid: ['r......', '.......', '>..P...', '.......', 'b.....g'] },
+
+  // ================= WORLD 6 — CONVERGENCE =================
+  // Mastery. Every tool, woven together, building to the finale.
+  { world: 6, name: 'Toolkit', budget: 3,
+    note: 'Warm-up for the end: a splitter, a gel and a mix in one breath.',
+    grid: ['>.....', '..Z.R.', '..B...', '.....m'] },
+
+  { world: 6, name: 'Long Distance', budget: 4,
+    note: 'Sources on opposite shores; mix their light in the middle with no slack.',
+    grid: ['>R..####', '###.####', '###.m.##', '#####.##', '#####.B<'] },
+
+  { world: 6, name: 'Recycle', budget: 3,
+    note: 'One beam, used twice: light a primary crystal, wash it white, then light a white one.',
+    grid: ['>Rr..', '####.', '#..*.', '#.###', '#w...'] },
+
+  { world: 6, name: 'Prism Mixer', budget: 4,
+    note: 'Disperse white, then marry two of its colours into a mixed crystal while the third flies clear.',
+    grid: ['.####.', '......', '>P.g#m', '......', '.####.'] },
+
+  { world: 6, name: 'Triage', budget: 4,
+    note: 'Three beams, three demands — decide what each split arm is for.',
+    grid: ['>ZR.#...', '.ZG.....', '.B..#..r', '....#...', '........', '.b..g...'] },
+
+  { world: 6, name: 'No Contamination', budget: 5,
+    note: 'A mix and a pure colour side by side; one stray ray ruins everything.',
+    grid: ['>....ZR.', '.....B..', '........', '###.###.', '...m....', 'r..#....'] },
+
+  { world: 6, name: 'Grand Design', budget: 5,
+    note: 'Split, disperse, mix, and bleach — every tool, one puzzle.',
+    grid: ['>.Z.P..#', '#.R....#', '##.#.#.#', '##.#.#.#', '#w.m.#.#', '#.*....#', '########'] },
+
+  { world: 6, name: 'Convergence', budget: 6,
+    note: 'Everything you have learned converges here. Light them all.',
+    grid: ['##..r#v###', '>.P.g#R###', '##.###*w##', '##..b#..##', '##########', '>ZR.######', '#B#.######', '#..m######'] },
 ];
