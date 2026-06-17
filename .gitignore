@@ -1,3 +1,8 @@
 node_modules/
 *.log
 .DS_Store
+
+# transient level-authoring scratch files (validated output is merged into tools/leveldata.js)
+scratch*.js
+mydesigns.js
+find*.js
