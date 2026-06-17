@@ -1,0 +1,15 @@
+{
+  "name": "PRISM — Light Puzzle",
+  "short_name": "PRISM",
+  "description": "Bend the light, light the crystals. A neon light-routing puzzle with 100+ levels.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070a18",
+  "theme_color": "#070a18",
+  "categories": ["games", "puzzle"],
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

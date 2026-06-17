@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialgradient id="bg" cx="35%" cy="20%" r="90%">
+      <stop offset="0%" stop-color="#1a2150"/>
+      <stop offset="60%" stop-color="#0c1130"/>
+      <stop offset="100%" stop-color="#070a18"/>
+    </radialgradient>
+    <lineargradient id="edge" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ff5a78"/>
+      <stop offset="50%" stop-color="#41e0a3"/>
+      <stop offset="100%" stop-color="#4aa8ff"/>
+    </lineargradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <!-- incoming white beam -->
+  <rect x="40" y="250" width="170" height="12" rx="6" fill="#eaf6ff"/>
+  <!-- prism triangle -->
+  <polygon points="256,150 360,330 152,330" fill="rgba(10,14,30,0.6)" stroke="url(#edge)" stroke-width="12" stroke-linejoin="round"/>
+  <!-- dispersed rays -->
+  <rect x="330" y="196" width="150" height="9" rx="4.5" fill="#ff5a78" transform="rotate(-16 330 200)"/>
+  <rect x="338" y="256" width="150" height="9" rx="4.5" fill="#41e0a3"/>
+  <rect x="330" y="312" width="150" height="9" rx="4.5" fill="#4aa8ff" transform="rotate(16 330 316)"/>
+</svg>

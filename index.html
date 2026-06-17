@@ -6,6 +6,10 @@
   <meta name="theme-color" content="#070a18" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon.svg" />
   <title>PRISM — Light Puzzle</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
@@ -19,24 +23,38 @@
           <h1>PRISM</h1>
           <p class="tagline">bend the light · light the crystals</p>
         </div>
-        <div class="menu-stars">★ <span id="total-stars">0 / 144</span></div>
+        <div class="menu-stars">★ <span id="total-stars">0 / 0</span></div>
         <div class="menu-buttons">
           <button id="btn-continue" class="btn btn-primary" data-idx="0">PLAY</button>
-          <button id="btn-play" class="btn">LEVEL SELECT</button>
-          <button id="btn-help" class="btn">HOW TO PLAY</button>
-          <button id="btn-reset-progress" class="btn btn-ghost">Reset Progress</button>
+          <button id="btn-worlds" class="btn">WORLDS</button>
+          <button id="btn-daily" class="btn">★ DAILY CHALLENGE</button>
+          <div class="menu-row">
+            <button id="btn-help" class="btn btn-small">HOW TO PLAY</button>
+            <button id="btn-settings" class="btn btn-small">SETTINGS</button>
+          </div>
         </div>
         <p class="hint-text">Tap a cell to place a mirror · tap again to rotate · once more to remove</p>
       </div>
     </section>
 
-    <!-- LEVEL SELECT -->
+    <!-- WORLD SELECT -->
+    <section id="screen-worlds" class="screen">
+      <header class="topbar">
+        <button id="btn-worlds-back" class="icon-btn">‹</button>
+        <h2>WORLDS</h2>
+        <div class="topbar-stars">★ <span id="worlds-stars">0 / 0</span></div>
+      </header>
+      <div id="world-list" class="world-list"></div>
+    </section>
+
+    <!-- LEVEL SELECT (within a world) -->
     <section id="screen-levels" class="screen">
       <header class="topbar">
         <button id="btn-levels-back" class="icon-btn">‹</button>
-        <h2>LEVELS</h2>
-        <div class="topbar-stars">★ <span id="levels-stars">0 / 96</span></div>
+        <h2 id="levels-title">WORLD</h2>
+        <div class="topbar-stars">★ <span id="levels-stars">0 / 0</span></div>
       </header>
+      <p id="levels-sub" class="levels-sub"></p>
       <div id="level-grid" class="level-grid"></div>
     </section>
 
@@ -52,7 +70,7 @@
       </header>
 
       <div class="hud">
-        <div id="mirror-pill" class="pill"><span class="pill-ico">◇</span> Mirrors <b id="mirror-count">0/0</b></div>
+        <div id="mirror-pill" class="pill"><span class="pill-ico">╱</span> Mirrors <b id="mirror-count">0/0</b></div>
         <div class="pill"><span class="pill-ico">◆</span> Lit <b id="target-count">0/0</b></div>
         <div class="pill"><span class="pill-ico">⚡</span> Taps <b id="tap-count">0</b> <i>· par <span id="par-count">0</span></i></div>
       </div>
@@ -62,6 +80,7 @@
       </div>
 
       <div class="controls">
+        <button id="btn-undo" class="btn btn-small btn-ghost">↶ Undo</button>
         <button id="btn-reset" class="btn btn-small">↺ Reset</button>
         <button id="btn-hint" class="btn btn-small btn-ghost">💡 Hint</button>
       </div>
@@ -71,26 +90,46 @@
     <div id="modal-help" class="modal">
       <div class="modal-card help-card">
         <h2>HOW TO PLAY</h2>
-        <p class="help-goal">Guide light from each <b>source</b> into every <b>crystal</b>, matching its colour.
-          Tap a cell to drop a mirror <b>╱</b>, tap again to flip it <b>╲</b>, once more to remove it.</p>
+        <p class="help-goal">Guide light from every <b>source</b> into every <b>crystal</b>, matching its exact colour.
+          Tap a cell to drop a mirror <b>╱</b>, tap again to flip it <b>╲</b>, once more to remove it. Beat <b>par</b> for 3 stars.</p>
         <div class="legend">
-          <div class="leg"><span class="ic" style="color:#eaf6ff">◉</span><div><b>Source</b> — fires a white beam.</div></div>
-          <div class="leg"><span class="ic" style="color:#4aa8ff">◆</span><div><b>Crystal</b> — light it with its exact colour.</div></div>
+          <div class="leg"><span class="ic" style="color:#eaf6ff">◉</span><div><b>Source</b> — fires a beam in its arrow direction.</div></div>
+          <div class="leg"><span class="ic" style="color:#4aa8ff">◆</span><div><b>Crystal</b> — light it with its exact colour. Stray light ruins it.</div></div>
           <div class="leg"><span class="ic" style="color:#fff">╱</span><div><b>Mirror</b> — you place these; bends the beam 90°.</div></div>
-          <div class="leg"><span class="ic" style="color:#8aa0d8">▦</span><div><b>Wall</b> — blocks light.</div></div>
-          <div class="leg"><span class="ic" style="color:#ff5a78">▣</span><div><b>Gel</b> — tints white to R/G/B. The wrong colour is absorbed — the beam dies. You can't re-tint.</div></div>
-          <div class="leg"><span class="ic" style="color:#cfe6ff">◇</span><div><b>Splitter</b> — turns one beam into two.</div></div>
-          <div class="leg"><span class="ic" style="color:#fff">✦</span><div><b>Bleach</b> — washes a beam back to white.</div></div>
-          <div class="leg"><span class="ic prism-ic">▲</span><div><b>Prism</b> — splits white: red bends left, green goes straight, blue bends right.</div></div>
+          <div class="leg"><span class="ic" style="color:#8aa0d8">▦</span><div><b>Wall</b> — blocks light. (A faint mirror is a <b>fixed</b> mirror — immovable.)</div></div>
+          <div class="leg"><span class="ic" style="color:#ff5a78">▢</span><div><b>Gel</b> — tints white to R/G/B. The wrong colour is absorbed — the beam dies. You can't re-tint.</div></div>
+          <div class="leg"><span class="ic" style="color:#cfe6ff">▨</span><div><b>Splitter</b> — turns one beam into two.</div></div>
+          <div class="leg"><span class="ic prism-ic">▲</span><div><b>Prism</b> — splits white: red left, green straight, blue right.</div></div>
+          <div class="leg"><span class="ic" style="color:#fff">✸</span><div><b>Bleach</b> — washes a beam back to white.</div></div>
+          <div class="leg"><span class="ic" style="color:#ffd35a">⟳</span><div><b>Rotator</b> — cycles a colour: red→green→blue→red.</div></div>
+          <div class="leg"><span class="ic" style="color:#c66bff">⊕</span><div><b>Tinter</b> — adds a colour to the beam (its glow tells you which).</div></div>
+          <div class="leg"><span class="ic" style="color:#38e6e6">▥</span><div><b>Gate</b> — a locked door; opens only for its exact colour.</div></div>
+          <div class="leg"><span class="ic" style="color:#38e6e6">◍</span><div><b>Portal</b> — teleports a beam to its matching ring.</div></div>
+          <div class="leg"><span class="ic" style="color:#ff5a78">✦</span><div><b>Void</b> — a black hole. If <b>any</b> beam touches it, you lose. Keep it clean.</div></div>
         </div>
         <p class="help-mix"><b>Mixing:</b> a crystal adds up all light it receives.
-          <span style="color:#ff5a78">red</span>+<span style="color:#4aa8ff">blue</span>=<span style="color:#c66bff">purple</span>,
+          <span style="color:#ff5a78">red</span>+<span style="color:#4aa8ff">blue</span>=<span style="color:#c66bff">magenta</span>,
           <span style="color:#ff5a78">red</span>+<span style="color:#41e0a3">green</span>=<span style="color:#ffd35a">yellow</span>,
           <span style="color:#41e0a3">green</span>+<span style="color:#4aa8ff">blue</span>=<span style="color:#38e6e6">cyan</span>,
           all three = <span style="color:#eaf6ff">white</span>. A stray ray ruins the mix.</p>
         <div class="modal-buttons">
           <button id="btn-help-close" class="btn btn-small btn-primary">Got it</button>
         </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS MODAL -->
+    <div id="modal-settings" class="modal">
+      <div class="modal-card settings-card">
+        <h2>SETTINGS</h2>
+        <div class="setting"><span>Sound effects</span><button id="set-sound" class="toggle" aria-pressed="true"></button></div>
+        <div class="setting"><span>Haptics (vibration)</span><button id="set-haptics" class="toggle" aria-pressed="true"></button></div>
+        <div class="setting"><span>Reduced motion</span><button id="set-motion" class="toggle" aria-pressed="false"></button></div>
+        <div class="modal-buttons settings-buttons">
+          <button id="btn-reset-progress" class="btn btn-small btn-ghost">Reset all progress</button>
+          <button id="btn-settings-close" class="btn btn-small btn-primary">Done</button>
+        </div>
+        <p class="settings-about">PRISM · a self-contained neon light-routing puzzle. No ads, no tracking, plays offline.</p>
       </div>
     </div>
 
@@ -113,6 +152,21 @@
       </div>
     </div>
 
+    <!-- WORLD-COMPLETE MODAL -->
+    <div id="modal-world" class="modal">
+      <div id="world-card" class="modal-card world-card">
+        <div class="win-rays"></div>
+        <p class="world-kicker">WORLD COMPLETE</p>
+        <h2 id="world-done-name">REFLECTION</h2>
+        <p id="world-done-flavor" class="win-flavor">Mastered.</p>
+        <p id="world-done-stars" class="world-done-stars">★ 0 / 0</p>
+        <div class="modal-buttons">
+          <button id="btn-world-menu" class="btn btn-small btn-ghost">≡ Worlds</button>
+          <button id="btn-world-next" class="btn btn-small btn-primary">Next World ›</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script src="js/engine.js"></script>
@@ -120,5 +174,6 @@
   <script src="js/audio.js"></script>
   <script src="js/render.js"></script>
   <script src="js/game.js"></script>
+  <script>if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {})); }</script>
 </body>
 </html>
