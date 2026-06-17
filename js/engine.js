@@ -13,6 +13,8 @@
  *   gel (R/G/B) ........... mask &= gel ; 0 = beam dies (subtractive)
  *   bleach ................ mask = 7 (white)
  *   gate (coloured) ....... passes only a beam whose mask matches exactly; else blocks
+ *   rotator ............... cycle colour channels R->G->B->R (direction unchanged)
+ *   tinter (R/G/B) ........ ADD a primary to the beam (mask |= c) — additive injector
  *   mirror / fixed ........ reflect
  *   splitter .............. straight + reflected
  *   prism ................. disperse: R left, G straight, B right
@@ -26,6 +28,8 @@
   'use strict';
 
   const DIRS = [[0, -1], [1, 0], [0, 1], [-1, 0]];
+  // rotate the 3-bit RGB mask: R(4)->G(2)->B(1)->R(4). White & black are fixed points.
+  function rot(m) { return ((m & 6) >> 1) | ((m & 1) << 2); }
   function reflect(orient, dir) { return orient === '/' ? [1, 0, 3, 2][dir] : [3, 2, 1, 0][dir]; }
   function mirrorFor(inDir, outDir) {
     if ((inDir === 0 && outDir === 1) || (inDir === 1 && outDir === 0) ||
@@ -42,6 +46,8 @@
     (level.targets || []).forEach(t => put(t.x, t.y, { type: 'target', mask: t.mask }));
     (level.filters || []).forEach(f => put(f.x, f.y, { type: 'filter', mask: f.mask }));
     (level.bleaches || []).forEach(p => put(p.x, p.y, { type: 'bleach' }));
+    (level.rotators || []).forEach(p => put(p.x, p.y, { type: 'rotator' }));
+    (level.tinters || []).forEach(p => put(p.x, p.y, { type: 'tinter', mask: p.mask }));
     (level.gates || []).forEach(g => put(g.x, g.y, { type: 'gate', mask: g.mask }));
     (level.prisms || []).forEach(p => put(p.x, p.y, { type: 'prism' }));
     (level.splitters || []).forEach(s => put(s.x, s.y, { type: 'splitter', orient: s.orient }));
@@ -84,6 +90,8 @@
       else if (o.type === 'target') { lit[nx + ',' + ny] = (lit[nx + ',' + ny] || 0) | b.mask; emit(nx, ny, b.dir, b.mask); }
       else if (o.type === 'filter') emit(nx, ny, b.dir, b.mask & o.mask);
       else if (o.type === 'bleach') emit(nx, ny, b.dir, 7);
+      else if (o.type === 'rotator') emit(nx, ny, b.dir, rot(b.mask));
+      else if (o.type === 'tinter') emit(nx, ny, b.dir, b.mask | o.mask);
       else if (o.type === 'mirror') emit(nx, ny, reflect(o.orient, b.dir), b.mask);
       else if (o.type === 'splitter') { emit(nx, ny, b.dir, b.mask); emit(nx, ny, reflect(o.orient, b.dir), b.mask); }
       else if (o.type === 'prism') {
@@ -107,5 +115,5 @@
     return { segments, lit, win, targetStatus, voidHit };
   }
 
-  return { simulate, reflect, mirrorFor, buildMap, DIRS };
+  return { simulate, reflect, mirrorFor, buildMap, DIRS, rot };
 }));

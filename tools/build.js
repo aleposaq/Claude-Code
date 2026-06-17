@@ -25,16 +25,31 @@ const DESIGNS = require('./leveldata.js');
 const out = [];
 const report = [];
 let fail = 0;
+const MAXB = 9;            // largest mirror budget we ever search for
+const cap = 6;             // stop counting solutions past this (tightness signal)
 
 DESIGNS.forEach((d, i) => {
   const level = parse(d);
-  const cap = 6;
-  const sols = solve(level, d.budget, cap);
+
+  // Budget calibration: if a design omits `budget`, find the MINIMUM number of
+  // mirrors that solves it and use exactly that — every level is tight by
+  // construction (no slack for sloppy play). An explicit budget is still honoured.
+  let budget = d.budget, sols;
+  if (budget == null) {
+    for (let b = 1; b <= MAXB; b++) { const s = solve(level, b, cap); if (s.length) { budget = b; sols = s; break; } }
+    if (budget == null) { budget = MAXB; sols = []; }
+  } else {
+    sols = solve(level, budget, cap);
+  }
+
   const minSol = sols.length ? sols[0] : null;
+  const trivial = Engine.simulate(level, []).win;
+  const area = level.w * level.h;
   const flags = [];
   if (!minSol) { flags.push('UNSOLVABLE'); fail++; }
   else {
-    if (minSol.length < d.budget) flags.push(`loose-budget(min ${minSol.length}<${d.budget})`);
+    if (trivial) { flags.push('TRIVIAL(0-mirror win)'); fail++; }
+    if (minSol.length < budget) flags.push(`loose-budget(min ${minSol.length}<${budget})`);
     if (sols.length >= cap) flags.push('many-solutions(>=' + cap + ')');
   }
   const solution = minSol || [];
@@ -45,14 +60,15 @@ DESIGNS.forEach((d, i) => {
   level.worldName = WORLD_NAMES[d.world];
   level.name = d.name;
   level.note = d.note || '';
-  level.budget = d.budget;
+  level.budget = budget;
   level.solution = solution;
   level.par = par;
   out.push(level);
 
   report.push(
-    `#${String(i + 1).padStart(2)} W${d.world} ${d.name.padEnd(20)} ` +
-    `budget:${d.budget} min:${minSol ? minSol.length : '-'} sols:${sols.length}${sols.length >= cap ? '+' : ''} ` +
+    `#${String(i + 1).padStart(3)} W${String(d.world).padStart(2)} ${d.name.padEnd(20)} ` +
+    `${String(level.w)}x${level.h} bud:${budget} min:${minSol ? minSol.length : '-'} ` +
+    `sols:${sols.length}${sols.length >= cap ? '+' : ''} ` +
     `${flags.length ? '  WARN ' + flags.join(' ') : 'ok'}`
   );
 });
@@ -60,7 +76,9 @@ DESIGNS.forEach((d, i) => {
 console.log(report.join('\n'));
 const warnLoose = report.filter(r => r.includes('loose-budget')).length;
 const warnMany = report.filter(r => r.includes('many-solutions')).length;
-console.log(`\n${out.length} levels | ${fail} unsolvable | ${warnLoose} loose-budget | ${warnMany} many-solutions`);
+const warnTriv = report.filter(r => r.includes('TRIVIAL')).length;
+const worlds = [...new Set(out.map(l => l.world))].length;
+console.log(`\n${out.length} levels across ${worlds} worlds | ${fail} blocking | ${warnLoose} loose-budget | ${warnMany} many-solutions | ${warnTriv} trivial`);
 
 if (process.argv.includes('--emit')) {
   if (fail) { console.error('Refusing to emit: unsolvable levels exist.'); process.exit(1); }
