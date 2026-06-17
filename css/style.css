@@ -148,6 +148,19 @@ body {
 .stars-row { display: flex; justify-content: center; gap: 14px; margin: 6px 0 14px; }
 .stars-row .star { font-size: 44px; color: rgba(255,255,255,.12); transition: transform .3s, color .3s, text-shadow .3s; }
 .stars-row .star.on { color: var(--gold); text-shadow: 0 0 22px rgba(255,211,90,.8); transform: scale(1.18) rotate(-6deg); }
+/* help / legend */
+.help-card { max-width: 420px; text-align: left; max-height: 86vh; overflow-y: auto; }
+.help-card h2 { text-align: center; }
+.help-goal { color: var(--text); font-size: 13px; line-height: 1.6; margin: 0 0 14px; }
+.help-goal b { color: #fff; }
+.legend { display: flex; flex-direction: column; gap: 9px; margin: 4px 0 14px; }
+.leg { display: flex; gap: 12px; align-items: flex-start; font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+.leg .ic { width: 22px; text-align: center; font-size: 18px; flex: 0 0 22px; }
+.leg b { color: var(--text); }
+.prism-ic { background: linear-gradient(135deg,#ff5a78,#41e0a3,#4aa8ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.help-mix { font-size: 12.5px; color: var(--muted); line-height: 1.7; background: rgba(0,0,0,.2); padding: 10px 12px; border-radius: 10px; margin: 0 0 16px; }
+.help-mix b { color: var(--text); }
+
 .win-stats { color: var(--muted); font-size: 14px; margin: 4px 0 20px; }
 .win-stats b { color: var(--text); }
 .modal-buttons { display: flex; gap: 8px; justify-content: center; }
