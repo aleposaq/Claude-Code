@@ -57,8 +57,6 @@
         <div class="pill"><span class="pill-ico">⚡</span> Taps <b id="tap-count">0</b> <i>· par <span id="par-count">0</span></i></div>
       </div>
 
-      <div id="level-note" class="level-note-bar"></div>
-
       <div class="board-wrap">
         <canvas id="board"></canvas>
       </div>
@@ -98,11 +96,14 @@
 
     <!-- WIN MODAL -->
     <div id="modal-win" class="modal">
-      <div class="modal-card">
+      <div id="win-card" class="modal-card win-card">
+        <div class="win-rays"></div>
         <h2 id="win-title">SOLVED</h2>
+        <p id="win-flavor" class="win-flavor">Clean lines.</p>
         <div id="win-stars" class="stars-row">
           <span class="star">★</span><span class="star">★</span><span class="star">★</span>
         </div>
+        <p id="win-perfect" class="win-perfect">PERFECT</p>
         <p class="win-stats">Taps <b id="win-taps">0</b> · Par <b id="win-par">0</b></p>
         <div class="modal-buttons">
           <button id="btn-replay" class="btn btn-small btn-ghost">↺ Replay</button>

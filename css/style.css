@@ -161,7 +161,22 @@ body {
 .help-mix { font-size: 12.5px; color: var(--muted); line-height: 1.7; background: rgba(0,0,0,.2); padding: 10px 12px; border-radius: 10px; margin: 0 0 16px; }
 .help-mix b { color: var(--text); }
 
-.win-stats { color: var(--muted); font-size: 14px; margin: 4px 0 20px; }
+/* themed, celebratory win screen */
+.win-card { position: relative; overflow: hidden; --accent: #4aa8ff; border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.win-rays { position: absolute; inset: -40% -40% auto -40%; height: 200%; pointer-events: none; opacity: .5;
+  background: conic-gradient(from 0deg, transparent 0 12deg, color-mix(in srgb, var(--accent) 35%, transparent) 12deg 14deg, transparent 14deg 30deg,
+    color-mix(in srgb, var(--accent) 35%, transparent) 30deg 32deg, transparent 32deg 48deg, color-mix(in srgb, var(--accent) 35%, transparent) 48deg 50deg, transparent 50deg);
+  animation: spin 14s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.win-card h2 { position: relative; margin: 0 0 4px; letter-spacing: 6px; font-size: 30px;
+  color: var(--accent); text-shadow: 0 0 26px color-mix(in srgb, var(--accent) 70%, transparent);
+  -webkit-text-fill-color: var(--accent); animation: winpop .4s cubic-bezier(.2,1.5,.4,1); }
+@keyframes winpop { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+.win-flavor { position: relative; color: var(--muted); font-size: 13px; letter-spacing: 1px; margin: 0 0 14px; }
+.win-perfect { position: relative; height: 16px; margin: -4px 0 6px; font-size: 13px; letter-spacing: 4px; font-weight: 800;
+  color: var(--gold); opacity: 0; transform: translateY(6px); transition: opacity .3s, transform .3s; text-shadow: 0 0 18px rgba(255,211,90,.8); }
+.win-perfect.show { opacity: 1; transform: none; }
+.win-stats { position: relative; color: var(--muted); font-size: 14px; margin: 4px 0 20px; }
 .win-stats b { color: var(--text); }
 .modal-buttons { display: flex; gap: 8px; justify-content: center; }
 
