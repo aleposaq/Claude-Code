@@ -6,20 +6,23 @@ const WORLD_NAMES = { 1: 'Reflection', 2: 'Spectrum', 3: 'Fracture', 4: 'Alchemy
 function parse(design) {
   const grid = design.grid;
   const h = grid.length, w = grid[0].length;
-  const L = { w, h, sources: [], targets: [], walls: [], filters: [], bleaches: [], prisms: [], splitters: [], gates: [], fixedMirrors: [] };
+  const L = { w, h, sources: [], targets: [], walls: [], voids: [], filters: [], bleaches: [], gates: [], prisms: [], splitters: [], portals: [], fixedMirrors: [] };
   for (let y = 0; y < h; y++) {
     if (grid[y].length !== w) throw new Error(`${design.name}: row ${y} width ${grid[y].length} != ${w}`);
     for (let x = 0; x < w; x++) {
       const c = grid[y][x];
       if (c === '.') continue;
       else if (c === '#') L.walls.push([x, y]);
+      else if (c === 'x') L.voids.push([x, y]);
       else if ('><^v'.includes(c)) L.sources.push({ x, y, dir: DIR[c], mask: 7 });
       else if ('rgbycmw'.includes(c)) L.targets.push({ x, y, mask: MASK[c] });
       else if (c === 'R') L.filters.push({ x, y, mask: 4 });
       else if (c === 'G') L.filters.push({ x, y, mask: 2 });
       else if (c === 'B') L.filters.push({ x, y, mask: 1 });
+      else if ('1234567'.includes(c)) L.gates.push({ x, y, mask: +c }); // coloured gate (exact-match door)
       else if (c === '*') L.bleaches.push({ x, y });
       else if (c === 'P') L.prisms.push({ x, y });
+      else if (c === 'o') L.portals.push({ x, y });
       else if (c === 'S') L.splitters.push({ x, y, orient: '/' });
       else if (c === 'Z') L.splitters.push({ x, y, orient: '\\' });
       else if (c === '/' || c === '\\') L.fixedMirrors.push({ x, y, orient: c });

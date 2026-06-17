@@ -17,6 +17,19 @@
   let save = loadSave();
   if (save.muted) Sound.toggle(true);
 
+  // haptics (mobile)
+  function vibe(p) { try { if (navigator.vibrate && !save.noHaptics) navigator.vibrate(p); } catch (e) {} }
+
+  // per-world celebration theming for the win screen
+  const THEMES = {
+    1: { accent: '#4aa8ff', title: 'SOLVED', flavor: 'Clean lines.' },
+    2: { accent: '#41e0a3', title: 'REFRACTED', flavor: 'Colour mastered.' },
+    3: { accent: '#b97bff', title: 'SHATTERED', flavor: 'One beam, many.' },
+    4: { accent: '#c66bff', title: 'TRANSMUTED', flavor: 'New colour forged.' },
+    5: { accent: '#ffd35a', title: 'DISPERSED', flavor: 'The full spectrum.' },
+    6: { accent: '#38e6e6', title: 'CONVERGED', flavor: 'Everything, at once.' },
+  };
+
   function stars(id) { return (save.levels && save.levels[id] && save.levels[id].stars) || 0; }
   function isUnlocked(idx) {
     if (idx === 0) return true;
@@ -63,7 +76,6 @@
     renderer.particles = [];
     $('#level-name').textContent = level.name;
     $('#world-tag').textContent = 'World ' + level.world + ' · ' + level.worldName;
-    $('#level-note').textContent = level.note || '';
     show('game');
     requestAnimationFrame(() => { renderer.layout(level); recompute(); });
   }
@@ -78,13 +90,13 @@
     if (occupied[gx + ',' + gy]) return; // can't place on fixed object
     const existing = placed.find(m => m.x === gx && m.y === gy);
     if (!existing) {
-      if (placed.length >= level.budget) { flashBudget(); return; }
+      if (placed.length >= level.budget) { flashBudget(); vibe(30); return; }
       placed.push({ x: gx, y: gy, orient: '/' });
-      taps++; Sound.place();
+      taps++; Sound.place(); vibe(8);
     } else if (existing.orient === '/') {
-      existing.orient = '\\'; taps++; Sound.rotate();
+      existing.orient = '\\'; taps++; Sound.rotate(); vibe(6);
     } else {
-      placed = placed.filter(m => m !== existing); taps++; Sound.remove();
+      placed = placed.filter(m => m !== existing); taps++; Sound.remove(); vibe(10);
     }
     recompute();
     if (sim.win) onWin();
@@ -98,28 +110,31 @@
 
   function onWin() {
     animating = true;
-    Sound.win();
-    sim.targetStatus.forEach(t => renderer.burst(t.x, t.y, t.mask));
+    Sound.win(); vibe([0, 35, 30, 70]);
+    sim.targetStatus.forEach((t, i) => setTimeout(() => renderer.burst(t.x, t.y, t.mask), i * 90));
     const earned = recordWin(level, taps);
     setTimeout(() => {
-      // stars chime
-      for (let i = 0; i < earned; i++) setTimeout(() => Sound.star(), 200 + i * 180);
+      for (let i = 0; i < earned; i++) setTimeout(() => { Sound.star(); vibe(18); }, 220 + i * 200);
       showWinModal(earned);
       animating = false;
-    }, 600);
+    }, 650);
   }
 
   function showWinModal(earned) {
+    const theme = THEMES[level.world] || THEMES[1];
+    const card = $('#win-card');
+    card.style.setProperty('--accent', theme.accent);
     $('#win-taps').textContent = taps;
     $('#win-par').textContent = level.par;
-    const starEls = $$('#win-stars .star');
-    starEls.forEach((s, i) => {
-      s.classList.remove('on');
-      if (i < earned) setTimeout(() => s.classList.add('on'), 250 + i * 200);
-    });
     const last = levelIndex >= LEVELS.length - 1;
+    $('#win-title').textContent = last ? 'ALL CLEAR' : theme.title;
+    $('#win-flavor').textContent = last ? 'You have mastered the light.' : theme.flavor;
+    const starEls = $$('#win-stars .star');
+    starEls.forEach((s, i) => { s.classList.remove('on'); if (i < earned) setTimeout(() => s.classList.add('on'), 280 + i * 220); });
+    const perfect = $('#win-perfect');
+    perfect.classList.remove('show');
+    if (earned >= 3) setTimeout(() => { perfect.classList.add('show'); vibe([0, 20, 20, 20, 20, 40]); }, 280 + 3 * 220);
     $('#btn-next').style.display = last ? 'none' : '';
-    $('#win-title').textContent = last ? 'ALL CLEAR!' : 'SOLVED';
     show('win', true);
   }
 
