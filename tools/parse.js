@@ -1,7 +1,10 @@
 /* Shared ASCII -> level parser for the build + trace tools. */
 const DIR = { '>': 1, '<': 3, '^': 0, 'v': 2 };
 const MASK = { r: 4, g: 2, b: 1, y: 6, c: 3, m: 5, w: 7 };
-const WORLD_NAMES = { 1: 'Reflection', 2: 'Spectrum', 3: 'Fracture', 4: 'Alchemy', 5: 'Dispersion', 6: 'Convergence' };
+const WORLD_NAMES = {
+  1: 'Reflection', 2: 'Spectrum', 3: 'Fracture', 4: 'Alchemy', 5: 'Dispersion', 6: 'Convergence',
+  7: 'Gateway', 8: 'Wormhole', 9: 'The Void', 10: 'Labyrinth', 11: 'Paradox', 12: 'Singularity',
+};
 
 function parse(design) {
   const grid = design.grid;

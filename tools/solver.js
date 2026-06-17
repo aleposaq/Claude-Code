@@ -67,6 +67,7 @@ function solve(level, budget, cap) {
   dfs([]);
   // sort solutions by size then return
   solutions.sort((a, b) => a.length - b.length);
+  solutions.nodes = nodes; // search effort — a proxy for how hard the solution is to FIND
   return solutions;
 }
 

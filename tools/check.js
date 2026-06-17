@@ -28,7 +28,8 @@ DESIGNS.forEach((d, i) => {
   const flags = [];
   if (!sols.length) { flags.push('UNSOLVABLE'); bad++; }
   else { if (sols[0].length < d.budget) flags.push('loose'); if (sols.length >= 6) flags.push('many'); }
-  console.log(`#${i + 1} ${d.name}  budget:${d.budget} min:${minLen} sols:${sols.length} ${flags.join(',') || 'ok'}`);
+  const area = L.w * L.h;
+  console.log(`#${i + 1} ${d.name}  ${L.w}x${L.h} budget:${d.budget} min:${minLen} sols:${sols.length} nodes:${sols.nodes || 0} ${flags.join(',') || 'ok'}`);
 
   const glyph = d.grid.map(r => r.split(''));
   sol.forEach(m => { glyph[m.y][m.x] = m.orient === '/' ? '/' : '\\'; });

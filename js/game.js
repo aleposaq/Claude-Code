@@ -28,6 +28,12 @@
     4: { accent: '#c66bff', title: 'TRANSMUTED', flavor: 'New colour forged.' },
     5: { accent: '#ffd35a', title: 'DISPERSED', flavor: 'The full spectrum.' },
     6: { accent: '#38e6e6', title: 'CONVERGED', flavor: 'Everything, at once.' },
+    7: { accent: '#ffa94a', title: 'UNLOCKED', flavor: 'The way is open.' },
+    8: { accent: '#7b8cff', title: 'WARPED', flavor: 'Space folded for you.' },
+    9: { accent: '#ff5a78', title: 'SURVIVED', flavor: 'Light from the abyss.' },
+    10: { accent: '#4ad6c0', title: 'UNRAVELLED', flavor: 'The maze yields.' },
+    11: { accent: '#ff6bd6', title: 'RESOLVED', flavor: 'The impossible, solved.' },
+    12: { accent: '#eaf6ff', title: 'TRANSCENDED', flavor: 'Master of light.' },
   };
 
   function stars(id) { return (save.levels && save.levels[id] && save.levels[id].stars) || 0; }

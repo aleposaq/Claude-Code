@@ -51,9 +51,9 @@ DESIGNS.forEach((d, i) => {
   out.push(level);
 
   report.push(
-    `#${String(i + 1).padStart(2)} W${d.world} ${d.name.padEnd(20)} ` +
-    `budget:${d.budget} min:${minSol ? minSol.length : '-'} sols:${sols.length}${sols.length >= cap ? '+' : ''} ` +
-    `${flags.length ? '  WARN ' + flags.join(' ') : 'ok'}`
+    `#${String(i + 1).padStart(2)} W${d.world} ${d.name.padEnd(18)} ` +
+    `${level.w}x${level.h} bud:${d.budget} min:${minSol ? minSol.length : '-'} sols:${sols.length}${sols.length >= cap ? '+' : ''} ` +
+    `nodes:${String(sols.nodes || 0).padStart(6)} ${flags.length ? ' WARN ' + flags.join(' ') : 'ok'}`
   );
 });
 
