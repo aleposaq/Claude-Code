@@ -1,50 +1,26 @@
 /*
- * PRISM — level build tool. Parses hand-authored ASCII level maps from
+ * PRISM — level build tool. Parses hand-authored ASCII maps from
  * tools/leveldata.js, validates each with the solver, and emits js/levels.js.
  *
- * It prints a quality report: solution count (a low number means a genuine,
- * tight puzzle), minimum mirrors, and budget — so we can see at a glance
- * whether a level is a real dilemma or a trivial one.
+ * Prints a quality report: solution count (low = a tight, intentional puzzle),
+ * minimum mirrors, and budget.
  *
  * ASCII legend
- *   .   empty cell (player may place a mirror here)
- *   #   wall (blocks the beam)
- *   > < ^ v   light source facing right/left/up/down (white)
- *   r g b w   crystal target requiring Red / Green / Blue / White light
- *   R G B     colour filter (recolours any beam passing through)
- *   / \       FIXED mirror (cannot be moved)
- *   S Z       beam splitter (S reflects like '/', Z reflects like '\')
+ *   .   empty (player may place a mirror)        #   wall
+ *   > < ^ v   white light source                 / \   FIXED mirror
+ *   r g b     primary crystal (red/green/blue)   R G B  primary gel (subtractive)
+ *   y c m     mixed crystal (yellow/cyan/magenta)*     bleach (resets to white)
+ *   w         white crystal                      P     dispersion prism
+ *   S Z       beam splitter (S like /, Z like \) :     coloured gate (see below)
+ *
+ * Gates are written as a colour letter wrapped: not used unless a level needs it.
  */
 const fs = require('fs');
 const path = require('path');
 const Engine = require('../js/engine.js');
 const { solve } = require('./solver.js');
+const { parse, WORLD_NAMES } = require('./parse.js');
 const DESIGNS = require('./leveldata.js');
-
-const DIR = { '>': 1, '<': 3, '^': 0, 'v': 2 };
-const WORLD_NAMES = { 1: 'Reflection', 2: 'Spectrum', 3: 'Fracture', 4: 'Convergence' };
-
-function parse(design) {
-  const grid = design.grid;
-  const h = grid.length, w = grid[0].length;
-  const level = { w, h, sources: [], targets: [], walls: [], filters: [], splitters: [], fixedMirrors: [] };
-  for (let y = 0; y < h; y++) {
-    if (grid[y].length !== w) throw new Error(`${design.name}: row ${y} width ${grid[y].length} != ${w}`);
-    for (let x = 0; x < w; x++) {
-      const c = grid[y][x];
-      if (c === '.') continue;
-      else if (c === '#') level.walls.push([x, y]);
-      else if ('><^v'.includes(c)) level.sources.push({ x, y, dir: DIR[c], color: 'W' });
-      else if ('rgbw'.includes(c)) level.targets.push({ x, y, color: c.toUpperCase() });
-      else if ('RGB'.includes(c)) level.filters.push({ x, y, color: c });
-      else if (c === '/' || c === '\\') level.fixedMirrors.push({ x, y, orient: c });
-      else if (c === 'S') level.splitters.push({ x, y, orient: '/' });
-      else if (c === 'Z') level.splitters.push({ x, y, orient: '\\' });
-      else throw new Error(`${design.name}: unknown char '${c}' at ${x},${y}`);
-    }
-  }
-  return level;
-}
 
 const out = [];
 const report = [];
@@ -52,15 +28,15 @@ let fail = 0;
 
 DESIGNS.forEach((d, i) => {
   const level = parse(d);
-  const sols = solve(level, d.budget, 6);
+  const cap = 6;
+  const sols = solve(level, d.budget, cap);
   const minSol = sols.length ? sols[0] : null;
   const flags = [];
   if (!minSol) { flags.push('UNSOLVABLE'); fail++; }
   else {
     if (minSol.length < d.budget) flags.push(`loose-budget(min ${minSol.length}<${d.budget})`);
-    if (sols.length >= 6) flags.push('many-solutions(>=6)');
+    if (sols.length >= cap) flags.push('many-solutions(>=' + cap + ')');
   }
-
   const solution = minSol || [];
   const par = solution.reduce((s, m) => s + (m.orient === '/' ? 1 : 2), 0);
 
@@ -75,14 +51,16 @@ DESIGNS.forEach((d, i) => {
   out.push(level);
 
   report.push(
-    `#${String(i + 1).padStart(2)} W${d.world} ${d.name.padEnd(22)} ` +
-    `budget:${d.budget} min:${minSol ? minSol.length : '-'} sols:${sols.length}${sols.length >= 6 ? '+' : ''} ` +
-    `${flags.length ? '  ⚠ ' + flags.join(' ') : '✓'}`
+    `#${String(i + 1).padStart(2)} W${d.world} ${d.name.padEnd(20)} ` +
+    `budget:${d.budget} min:${minSol ? minSol.length : '-'} sols:${sols.length}${sols.length >= cap ? '+' : ''} ` +
+    `${flags.length ? '  WARN ' + flags.join(' ') : 'ok'}`
   );
 });
 
 console.log(report.join('\n'));
-console.log(`\n${out.length} levels, ${fail} unsolvable.`);
+const warnLoose = report.filter(r => r.includes('loose-budget')).length;
+const warnMany = report.filter(r => r.includes('many-solutions')).length;
+console.log(`\n${out.length} levels | ${fail} unsolvable | ${warnLoose} loose-budget | ${warnMany} many-solutions`);
 
 if (process.argv.includes('--emit')) {
   if (fail) { console.error('Refusing to emit: unsolvable levels exist.'); process.exit(1); }

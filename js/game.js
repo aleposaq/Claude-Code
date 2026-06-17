@@ -99,7 +99,7 @@
   function onWin() {
     animating = true;
     Sound.win();
-    sim.targetStatus.forEach(t => renderer.burst(t.x, t.y, (level.targets.find(o => o.x === t.x && o.y === t.y) || {}).color));
+    sim.targetStatus.forEach(t => renderer.burst(t.x, t.y, t.mask));
     const earned = recordWin(level, taps);
     setTimeout(() => {
       // stars chime
@@ -196,6 +196,8 @@
 
   // buttons
   $('#btn-play').addEventListener('click', () => { Sound.click(); show('levels'); });
+  $('#btn-help').addEventListener('click', () => { Sound.click(); $('#modal-help').classList.add('show'); });
+  $('#btn-help-close').addEventListener('click', () => { Sound.click(); $('#modal-help').classList.remove('show'); });
   $('#btn-continue').addEventListener('click', e => { Sound.click(); startLevel(+e.currentTarget.dataset.idx); });
   $('#btn-levels-back').addEventListener('click', () => { Sound.back(); show('menu'); });
   $('#btn-quit').addEventListener('click', () => { Sound.back(); show('levels'); });

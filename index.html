@@ -19,10 +19,11 @@
           <h1>PRISM</h1>
           <p class="tagline">bend the light · light the crystals</p>
         </div>
-        <div class="menu-stars">★ <span id="total-stars">0 / 96</span></div>
+        <div class="menu-stars">★ <span id="total-stars">0 / 144</span></div>
         <div class="menu-buttons">
           <button id="btn-continue" class="btn btn-primary" data-idx="0">PLAY</button>
           <button id="btn-play" class="btn">LEVEL SELECT</button>
+          <button id="btn-help" class="btn">HOW TO PLAY</button>
           <button id="btn-reset-progress" class="btn btn-ghost">Reset Progress</button>
         </div>
         <p class="hint-text">Tap a cell to place a mirror · tap again to rotate · once more to remove</p>
@@ -67,6 +68,33 @@
         <button id="btn-hint" class="btn btn-small btn-ghost">💡 Hint</button>
       </div>
     </section>
+
+    <!-- HELP MODAL -->
+    <div id="modal-help" class="modal">
+      <div class="modal-card help-card">
+        <h2>HOW TO PLAY</h2>
+        <p class="help-goal">Guide light from each <b>source</b> into every <b>crystal</b>, matching its colour.
+          Tap a cell to drop a mirror <b>╱</b>, tap again to flip it <b>╲</b>, once more to remove it.</p>
+        <div class="legend">
+          <div class="leg"><span class="ic" style="color:#eaf6ff">◉</span><div><b>Source</b> — fires a white beam.</div></div>
+          <div class="leg"><span class="ic" style="color:#4aa8ff">◆</span><div><b>Crystal</b> — light it with its exact colour.</div></div>
+          <div class="leg"><span class="ic" style="color:#fff">╱</span><div><b>Mirror</b> — you place these; bends the beam 90°.</div></div>
+          <div class="leg"><span class="ic" style="color:#8aa0d8">▦</span><div><b>Wall</b> — blocks light.</div></div>
+          <div class="leg"><span class="ic" style="color:#ff5a78">▣</span><div><b>Gel</b> — tints white to R/G/B. The wrong colour is absorbed — the beam dies. You can't re-tint.</div></div>
+          <div class="leg"><span class="ic" style="color:#cfe6ff">◇</span><div><b>Splitter</b> — turns one beam into two.</div></div>
+          <div class="leg"><span class="ic" style="color:#fff">✦</span><div><b>Bleach</b> — washes a beam back to white.</div></div>
+          <div class="leg"><span class="ic prism-ic">▲</span><div><b>Prism</b> — splits white: red bends left, green goes straight, blue bends right.</div></div>
+        </div>
+        <p class="help-mix"><b>Mixing:</b> a crystal adds up all light it receives.
+          <span style="color:#ff5a78">red</span>+<span style="color:#4aa8ff">blue</span>=<span style="color:#c66bff">purple</span>,
+          <span style="color:#ff5a78">red</span>+<span style="color:#41e0a3">green</span>=<span style="color:#ffd35a">yellow</span>,
+          <span style="color:#41e0a3">green</span>+<span style="color:#4aa8ff">blue</span>=<span style="color:#38e6e6">cyan</span>,
+          all three = <span style="color:#eaf6ff">white</span>. A stray ray ruins the mix.</p>
+        <div class="modal-buttons">
+          <button id="btn-help-close" class="btn btn-small btn-primary">Got it</button>
+        </div>
+      </div>
+    </div>
 
     <!-- WIN MODAL -->
     <div id="modal-win" class="modal">
