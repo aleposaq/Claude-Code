@@ -125,96 +125,62 @@ module.exports = [
     note: 'Same trick, new mix: red + green = yellow.',
     grid: ['>.Z.R.', '..G...', '......', '.....y'] },
 
+  { world: 4, name: 'Cyan', budget: 2,
+    note: 'Green + blue = cyan, from one split beam.',
+    grid: ['>.Z.G.', '..B...', '......', '.....c'] },
+
   { world: 4, name: 'Opposite Shores', budget: 2,
-    note: 'You combined light. Now the sources sit across the map with little room.',
-    grid: ['>R..........B<', '..............', '......m.......'] },
+    note: 'You combined light; now the sources sit across the map with little room.',
+    grid: ['>R.......', '...#m#...', '.......B<'] },
 
-  { world: 4, name: 'Keep It Clean', budget: 3,
-    note: 'Purple is red + blue ONLY. Let green touch it and you get white. Aim true.',
-    grid: ['>.Z.R.', '..Z...', '..G..g', '.....m', '......'] },
+  { world: 4, name: 'Keep It Clean', budget: 2,
+    note: 'Purple is red + blue ONLY — let green touch it and you get white. Keep green away.',
+    grid: ['v........', '.........', 'ZR......m', '.........', 'ZB.......', '.G......g'] },
 
-  { world: 4, name: 'Cyan', budget: 3,
-    note: 'Mix on the move: green + blue = cyan, from a single split beam.',
-    grid: ['>..Z.G', '.....c', '...B..', '......'] },
+  { world: 4, name: 'Two Potions', budget: 3,
+    note: 'Brew two mixes at once; share your primaries with care.',
+    grid: ['v.......', 'ZR......', '........', 'ZG..Z..y', '........', 'ZB.....c'] },
 
-  { world: 4, name: 'White Lie', budget: 3,
-    note: 'A white crystal can be faked: red + green + blue all at once.',
-    grid: ['>.Z.R.', '..Z...', '..G..w', '..B...', '......'] },
+  { world: 4, name: 'Crucible', budget: 4,
+    note: 'A mix locked behind walls — converge two colours in tight quarters.',
+    grid: ['>.Z.R.', '..B.#.', '....#.', '#.#.#.', '.....m'] },
 
-  { world: 4, name: 'Two Potions', budget: 4,
-    note: 'Brew two mixes from one source. Share your primaries with care.',
-    grid: ['>.Z.R.', '..Z..m', '..B...', '..G..y', '..R...'] },
-
-  { world: 4, name: 'Alchemy', budget: 4,
-    note: 'Capstone: split, tint, and converge two colours into one crystal past walls.',
-    grid: ['>.Z..', '.R.#.', '...#.', '.B.#m', '.....'] },
+  { world: 4, name: 'Alchemy', budget: 6,
+    note: 'Capstone: split, tint, and converge two colours into one crystal through a wall maze.',
+    grid: ['>.Z.R.', '..B...', '.....#', '......', '...#..', '.....m'] },
 
   // ================= WORLD 5 — DISPERSION =================
   // The prism splits a beam into its colours (R left, G straight, B right).
   // The bleach washes a beam back to white so it can be used again.
   { world: 5, name: 'Rainbow', budget: 1,
-    note: 'The prism unpacks white into its colours: red bends one way, blue the other.',
-    grid: ['.r..', '>P..', '...g', '.b..'] },
+    note: 'The prism unpacks white into its colours.',
+    grid: ['.r..', '>Pg.', '...b'] },
 
-  { world: 5, name: 'Aim the Rainbow', budget: 2,
-    note: 'The colours come out where the prism decides. Now bend them where YOU need.',
-    grid: ['>P...', '.....', 'r.g.b', '.....'] },
+  { world: 5, name: 'Aim the Rainbow', budget: 3,
+    note: 'The colours come out where the prism decides — now bend them where YOU need.',
+    grid: ['r....', '.....', '.>P..', '.....', 'b...g'] },
 
-  { world: 5, name: 'Bleach', budget: 2,
-    note: 'A bleach washes any beam back to white — so it can be coloured anew.',
-    grid: ['>R.*.', '.....', '....w'] },
+  { world: 5, name: 'Bleach', budget: 1,
+    note: 'A bleach washes any beam back to white.',
+    grid: ['>R*..', '....w'] },
 
-  { world: 5, name: 'Reset & Retint', budget: 2,
+  { world: 5, name: 'Reset & Retint', budget: 1,
     note: "You can't turn red into blue — but wash it white first, and you can.",
-    grid: ['>R*B.', '.....', '....b'] },
+    grid: ['>R*B.', '....b'] },
 
   { world: 5, name: 'Half Spectrum', budget: 2,
     note: 'Feed the prism a single colour and only that colour comes out.',
-    grid: ['>R.P.', '.....', '...r.', '.....'] },
+    grid: ['.....', '.....', '>RP.r', '.....'] },
 
-  { world: 5, name: 'Refract & Mix', budget: 3,
+  { world: 5, name: 'Refract & Mix', budget: 2,
     note: 'Disperse white, then recombine two of the colours into one mixed crystal.',
-    grid: ['>.P..', '..m..', 'g....', '.....'] },
+    grid: ['...y', '....', '>P..', '....'] },
 
   { world: 5, name: 'Prism Maze', budget: 3,
-    note: 'A rainbow in a box. Route the colours past the walls to their crystals.',
-    grid: ['>.P..', '.#.#.', 'r#b#g', '.....'] },
+    note: 'A rainbow in a box — route the colours past the walls to their crystals.',
+    grid: ['.#.#g', 'r..#.', '#....', '>.P..', '.#..b'] },
 
   { world: 5, name: 'Dispersion', budget: 3,
-    note: 'Capstone: split white the long way and deliver three pure colours.',
-    grid: ['>..P..', '..r...', '.....g', '..b...'] },
-
-  // ================= WORLD 6 — CONVERGENCE =================
-  // Everything, woven together. Long puzzles that demand the whole toolkit.
-  { world: 6, name: 'Toolkit', budget: 3,
-    note: 'Warm-up for the end: a splitter, a gel and a mix in one breath.',
-    grid: ['>.Z.R.', '..B...', '.....m', '......'] },
-
-  { world: 6, name: 'Long Distance', budget: 4,
-    note: 'Sources on opposite shores; mix their light in the middle with no slack.',
-    grid: ['>R........', '..........', '.....m....', '..........', '........B<'] },
-
-  { world: 6, name: 'Recycle', budget: 3,
-    note: 'One beam, used twice: light a red crystal, wash it white, light a white one.',
-    grid: ['>R.r.', '....*', '....w', '.....'] },
-
-  { world: 6, name: 'Prism Mixer', budget: 4,
-    note: 'Disperse white, then marry two of its colours into a mixed crystal.',
-    grid: ['>.P...', '.....m', 'g.....', '......'] },
-
-  { world: 6, name: 'Triage', budget: 4,
-    note: 'Three beams, three demands. Decide what each split arm is for.',
-    grid: ['>.Z...', '..Z..r', '..R..g', '..G..b'] },
-
-  { world: 6, name: 'No Contamination', budget: 5,
-    note: 'A mix and a pure colour, side by side. One stray ray ruins everything.',
-    grid: ['>.Z.R.', '..Z...', '..B..m', '..G..g', '......'] },
-
-  { world: 6, name: 'Grand Design', budget: 5,
-    note: 'Split, disperse, mix, and bleach — every tool, one puzzle.',
-    grid: ['>.Z...', '..P..m', '.....g', '..B...', 'b.....'] },
-
-  { world: 6, name: 'Convergence', budget: 6,
-    note: 'The finale. Everything you have learned converges here. Light them all.',
-    grid: ['>.Z..R.', '..Z..m.', '..B....', '..P..g.', '..b...r'] },
+    note: 'Split white the long way and deliver three pure colours.',
+    grid: ['r......', '.......', '>..P...', '.......', 'b.....g'] },
 ];
