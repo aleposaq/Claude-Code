@@ -1,0 +1,36 @@
+/* PRISM v2 — styles for the build-and-fire loop (layered on style.css) */
+.v2-badge { color: var(--muted); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin: 18px 0 10px; opacity: .8; }
+
+.level-grid2 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; max-width: 320px; margin: 4px auto 0; }
+.lvl-btn {
+  aspect-ratio: 1; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--text);
+  cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  transition: transform .08s ease, box-shadow .2s ease;
+}
+.lvl-btn:active { transform: scale(.94); }
+.lvl-btn .n { font-size: 18px; font-weight: 800; }
+.lvl-btn .s { font-size: 9px; color: var(--gold); letter-spacing: 1px; }
+.lvl-btn.locked { opacity: .4; cursor: default; }
+
+/* inventory tray */
+.tray { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; padding: 8px 0 2px; min-height: 56px; }
+.tray.flash { animation: trayflash .4s ease; }
+@keyframes trayflash { 0%,100% {} 30% { filter: drop-shadow(0 0 8px rgba(255,90,120,.8)); } }
+.tool {
+  position: relative; width: 56px; height: 56px; border-radius: 14px;
+  border: 1px solid var(--line); background: var(--panel); color: var(--text); cursor: pointer;
+  display: grid; place-items: center; transition: transform .08s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.tool:active { transform: scale(.92); }
+.tool .tg { font-size: 26px; line-height: 1; }
+.tool .tc { position: absolute; right: 5px; bottom: 3px; font-size: 11px; font-weight: 700; color: var(--muted); }
+.tool.sel { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(74,168,255,.35), 0 6px 18px rgba(74,168,255,.25); }
+.tool.empty { opacity: .35; }
+
+/* fire button */
+.btn-fire {
+  background: linear-gradient(135deg, #ffd35a, #ff8a5a); border: none; color: #2a1400;
+  font-size: 16px; font-weight: 800; letter-spacing: 2px; padding: 15px 34px; border-radius: 14px;
+  box-shadow: 0 8px 26px rgba(255,160,80,.4); transition: transform .08s ease, box-shadow .2s ease;
+}
+.btn-fire:active { transform: scale(.95); box-shadow: 0 4px 14px rgba(255,160,80,.5); }
