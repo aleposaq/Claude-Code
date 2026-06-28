@@ -1,5 +1,18 @@
 /* PRISM v2 — styles for the build-and-fire loop (layered on style.css) */
+/* mobile-first: the board canvas MUST fill its flex slot, never its backing-store size */
+#board2 { width: 100%; height: 100%; display: block; touch-action: manipulation; }
+.screen2 { padding: max(10px, env(safe-area-inset-top)) 12px max(10px, env(safe-area-inset-bottom)); }
+.screen2 .board-wrap { flex: 1 1 auto; min-height: 0; display: flex; padding: 4px 0; }
+.screen2 .hud { margin-bottom: 6px; }
 .v2-badge { color: var(--muted); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin: 18px 0 10px; opacity: .8; }
+
+/* menu scrolls through 5 worlds */
+#screen-menu2 { justify-content: flex-start; overflow-y: auto; }
+#screen-menu2 .menu-inner { margin: 0 auto; padding: 18px 0 30px; }
+.world-head2 { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 10px; margin: 16px 4px 6px;
+  padding-bottom: 6px; border-bottom: 1px solid currentColor; }
+.world-head2 b { font-size: 15px; letter-spacing: 2px; }
+.world-head2 span { font-size: 10px; letter-spacing: 3px; color: var(--muted); }
 
 .level-grid2 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; max-width: 320px; margin: 4px auto 0; }
 .lvl-btn {
@@ -17,14 +30,17 @@
 .tray.flash { animation: trayflash .4s ease; }
 @keyframes trayflash { 0%,100% {} 30% { filter: drop-shadow(0 0 8px rgba(255,90,120,.8)); } }
 .tool {
-  position: relative; width: 56px; height: 56px; border-radius: 14px;
+  position: relative; width: 60px; height: 64px; border-radius: 14px;
   border: 1px solid var(--line); background: var(--panel); color: var(--text); cursor: pointer;
-  display: grid; place-items: center; transition: transform .08s ease, border-color .15s ease, box-shadow .15s ease;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+  transition: transform .08s ease, border-color .15s ease, box-shadow .15s ease;
 }
 .tool:active { transform: scale(.92); }
-.tool .tg { font-size: 26px; line-height: 1; }
-.tool .tc { position: absolute; right: 5px; bottom: 3px; font-size: 11px; font-weight: 700; color: var(--muted); }
+.tool .ticon { width: 38px; height: 38px; }
+.tool .tl { font-size: 8.5px; letter-spacing: .5px; text-transform: uppercase; color: var(--muted); line-height: 1; }
+.tool .tc { position: absolute; right: 5px; top: 4px; font-size: 11px; font-weight: 800; color: var(--text); }
 .tool.sel { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(74,168,255,.35), 0 6px 18px rgba(74,168,255,.25); }
+.tool.sel .tl { color: var(--accent); }
 .tool.empty { opacity: .35; }
 
 /* fire button */

@@ -1,0 +1,38 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"/>
+<style>body{margin:0;background:#070a18;font-family:system-ui;color:#cdd}
+.row{display:flex;gap:8px;align-items:center;padding:6px 10px}
+canvas{background:#070a18}</style></head><body>
+<div class="row"><div style="width:90px">BUILD (off)</div><canvas id="a" width="600" height="500"></canvas></div>
+<div class="row"><div style="width:90px">FIRED (on)</div><canvas id="b" width="600" height="500"></canvas></div>
+<div class="row"><div style="width:90px">TRAY</div><span id="tray" style="display:flex;gap:10px"></span></div>
+<script src="js/engine2.js"></script>
+<script src="js/render2.js"></script>
+<script>
+const level = { world:1, w:6, h:5,
+  sources:[{x:0,y:2,dir:1}],
+  targets:[{x:5,y:1,mask:7},{x:0,y:3,mask:2}],
+  switches:[{x:5,y:4,mask:4,door:'A'}],
+  doors:[{x:5,y:2,door:'A'}],
+  teleporters:[{x:0,y:0,pair:'p'},{x:0,y:4,pair:'p'}],
+  voids:[[3,2]],
+  walls:[[2,2]],
+};
+const placed=[
+  {type:'mirror',x:1,y:0,orient:'/'},{type:'mirror',x:2,y:0,orient:'\\'},
+  {type:'splitter',x:3,y:0,orient:'/'},{type:'splitter',x:4,y:0,orient:'\\'},
+  {type:'prism',x:5,y:0,orient:'/'},{type:'prism',x:1,y:4,orient:'\\'},
+  {type:'filter',x:2,y:4,color:4},{type:'filter',x:3,y:4,color:2},{type:'filter',x:4,y:4,color:1},
+];
+const fakeSim={ segments:[
+  {x1:0.5,y1:2.5,x2:1.5,y2:2.5,mask:7},{x1:1.5,y1:2.5,x2:2.5,y2:2.5,mask:7},
+  {x1:3.5,y1:3.5,x2:4.5,y2:3.5,mask:4},{x1:4.5,y1:1.5,x2:5.5,y2:1.5,mask:6},
+  {x1:1.5,y1:0.5,x2:1.5,y2:1.5,mask:3} ],
+  switchStatus:[{x:5,y:4,on:true}], openDoors:new Set(['A']),
+  targetStatus:[{x:5,y:1,lit:true},{x:0,y:3,lit:false}] };
+const ra=new Renderer2(document.getElementById('a'));
+const rb=new Renderer2(document.getElementById('b'));
+ra.layout(level); rb.layout(level);
+function loop(){ ra.draw(level,placed,null,{}); rb.draw(level,placed,fakeSim,{}); requestAnimationFrame(loop);} loop();
+// tray icons
+['mirror','splitter','prism','filter'].forEach(tt=>{const c=document.createElement('canvas');c.style.width='40px';c.style.height='40px';c.style.background='#12182f';c.style.borderRadius='12px';Renderer2.pieceIcon(c,tt,4);document.getElementById('tray').appendChild(c);});
+</script></body></html>

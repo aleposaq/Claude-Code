@@ -54,7 +54,11 @@
       const rem = remaining(type);
       const b = document.createElement('button');
       b.className = 'tool' + (selectedTool === type ? ' sel' : '') + (rem <= 0 ? ' empty' : '');
-      b.innerHTML = `<span class="tg">${GLYPH[type]}</span><span class="tc">${rem}</span>`;
+      const cv = document.createElement('canvas'); cv.className = 'ticon';
+      const badge = document.createElement('span'); badge.className = 'tc'; badge.textContent = rem;
+      const label = document.createElement('span'); label.className = 'tl'; label.textContent = type;
+      b.appendChild(cv); b.appendChild(badge); b.appendChild(label);
+      Renderer2.pieceIcon(cv, type, 7);
       b.addEventListener('click', () => { Sound.click(); selectedTool = type; buildTray(); });
       tray.appendChild(b);
     });
@@ -112,6 +116,8 @@
   }
 
   function showWin(earned) {
+    const th = Renderer2.themeFor(level.world || 1);
+    $('#win-card2').style.setProperty('--accent', th.accent);
     const last = levelIndex >= LEVELS.length - 1;
     $('#win2-title').textContent = last ? 'FOUNDRY CLEARED' : (earned >= 3 ? 'PERFECT' : 'SOLVED');
     $('#win2-stats').innerHTML = `<b>${placed.length}</b> pieces · par <b>${level.par}</b> · <b>${fires}</b> fire${fires === 1 ? '' : 's'}`;
@@ -132,11 +138,20 @@
   function buildMenu() {
     $('#menu-stars2').textContent = totalStars() + ' / ' + (LEVELS.length * 3);
     const grid = $('#level-grid2'); grid.innerHTML = '';
+    let cur = 0, n = 0;
     LEVELS.forEach((l, i) => {
+      if (l.world !== cur) {
+        cur = l.world; const th = Renderer2.themeFor(cur);
+        const h = document.createElement('div'); h.className = 'world-head2';
+        h.style.color = th.accent; h.style.borderColor = th.accent;
+        h.innerHTML = `<b>WORLD ${cur}</b><span>${th.name.toUpperCase()}</span>`;
+        grid.appendChild(h); n = 0;
+      }
+      n++;
       const unlocked = isUnlocked(i), st = stars(l.id);
       const b = document.createElement('button');
       b.className = 'lvl-btn' + (unlocked ? '' : ' locked');
-      b.innerHTML = unlocked ? `<span class="n">${i + 1}</span><span class="s">${'★'.repeat(st)}${'☆'.repeat(3 - st)}</span>` : '🔒';
+      b.innerHTML = unlocked ? `<span class="n">${n}</span><span class="s">${'★'.repeat(st)}${'☆'.repeat(3 - st)}</span>` : '🔒';
       if (unlocked) b.addEventListener('click', () => { Sound.click(); startLevel(i); });
       grid.appendChild(b);
     });
@@ -164,4 +179,12 @@
   }
   loop();
   show('menu');
+
+  // dev hook for headless visual validation (harmless in production)
+  window.__dev = {
+    start: startLevel,
+    set: a => { placed = a; sim = null; buildTray(); updateHud(); },
+    fire,
+    unlock: () => { LEVELS.forEach(l => { save[l.id] = { stars: Math.max(stars(l.id), 1), bestPieces: 99, bestFires: 99 }; }); persist(); },
+  };
 })();
