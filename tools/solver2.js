@@ -16,7 +16,8 @@
  */
 const Engine = require('../js/engine2.js');
 
-const NODE_CAP = 800000;
+const NODE_CAP = 300000;
+const LIVE_BUDGET = 40000; // per-candidate cap when measuring live-decision difficulty
 
 function occupied(level) {
   const s = new Set();
@@ -160,8 +161,7 @@ function liveFirstMoves(level) {
       for (const opt of optionsFor(type)) {
         total++;
         const rem = Object.assign({}, inv); rem[type]--;
-        const sub = { w: level.w, h: level.h }; // shallow reuse via closure on level
-        if (winnableFrom(level, [Object.assign({ x: c.x, y: c.y }, opt)], rem, occ)) live++;
+        if (winnableFrom(level, [Object.assign({ x: c.x, y: c.y }, opt)], rem, occ, LIVE_BUDGET)) live++;
       }
     }
   }
@@ -169,10 +169,11 @@ function liveFirstMoves(level) {
 }
 
 // Boolean: is a win reachable from this partial placement within the remaining inventory?
-function winnableFrom(level, placed, remaining, occ) {
+function winnableFrom(level, placed, remaining, occ, budget) {
+  budget = budget || NODE_CAP;
   let nodes = 0; let found = false;
   function dfs(pl, rem) {
-    if (found || nodes > NODE_CAP) return;
+    if (found || nodes > budget) return;
     nodes++;
     const sim = Engine.simulate(level, pl);
     if (sim.win) { found = true; return; }
